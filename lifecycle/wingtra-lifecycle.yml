@@ -1,0 +1,84 @@
+generated: '2026-09-04'
+method: searched
+source:
+- https://knowledge.wingtra.com/en/wingtracloud-releases-
+- https://knowledge.wingtra.com/en/wingtrapilot-wingtraone-releases
+- https://knowledge.wingtra.com/en/wingtraray-releases-
+- https://knowledge.wingtra.com/en/blue-suas-software-releases-changelog
+- graphql/wingtra-my-portal.graphql
+versioning:
+- surface: wingtracloud-and-wingtra-app
+  scheme: semver-ish minor train, dated
+  current: v1.66.0
+  current_date: '2026-08-31'
+  cadence: roughly weekly
+  release_notes: https://knowledge.wingtra.com/en/wingtracloud-releases-
+- surface: wingtrapilot-wingtraone
+  scheme: semver
+  current: v2.19.0
+  current_date: '2025-07-03'
+  release_notes: https://knowledge.wingtra.com/en/wingtrapilot-wingtraone-releases
+- surface: portal-graphql-api
+  scheme: none
+  current: null
+  detail: >-
+    Unversioned. No path segment, no version header, no dated train, and no @deprecated
+    directive anywhere in the 84-type schema. The product changelog above tracks the
+    software, not this API's contract.
+- surface: wingtracloud-rest-api
+  scheme: path prefix
+  current: v1
+  detail: /v1 is the only version observable; no deprecation or sunset of it is published.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: unknown
+  detail: >-
+    Wingtra publishes no API deprecation or sunset policy, and no RFC 8594 Sunset or
+    Deprecation header was observed. The only end-of-support statement found anywhere is a
+    hardware one in the WingtraPilot notes — v2.2 was "the last software update that
+    supports the Samsung Galaxy Tab A tablet" — which is a device compatibility notice, not
+    an API policy. No `Deprecation` pointer is emitted.
+deprecated_operations: []
+deprecated_operations_note: >-
+  Zero. No field or type in the introspected GraphQL schema carries @deprecated, and there
+  is no OpenAPI to read deprecation flags from.
+status_page:
+  url: null
+  published: false
+  detail: >-
+    No status page exists. status.wingtra.com does not resolve (NXDOMAIN);
+    wingtra.statuspage.io and wingtra.instatus.com both return the vendors' own marketing
+    pages, not a Wingtra status page. Neither wingtra.com nor the knowledge base links one.
+    No `StatusPage` pointer is emitted.
+sla:
+  url: null
+  uptime_target: null
+  published: false
+  detail: >-
+    No SLA is published for WingtraCLOUD or either API. The support page states support
+    tickets are answered within 24 hours on working days, which is a support response
+    target, not an availability commitment.
+support:
+  url: https://wingtra.com/support/
+  channels: [support ticket, knowledge base, distributor network]
+  response_target: 24 hours on working days
+changelog:
+  url: https://knowledge.wingtra.com/en/wingtracloud-releases-
+  published: true
+  api_specific: false
+  detail: changelog/wingtra-changelog.yml
+roadmap:
+  url: null
+  published: false
+  detail: >-
+    Wingtra's support material states that existing customers and distributors can access a
+    features roadmap, which places it behind the customer portal. No public roadmap URL was
+    found, so no `Roadmap` pointer is emitted.
+x-evidence:
+  fetched: '2026-09-04'
+  probes:
+  - {url: 'https://knowledge.wingtra.com/en/wingtracloud-releases-', http_status: 200}
+  - {url: 'https://knowledge.wingtra.com/en/wingtrapilot-wingtraone-releases', http_status: 200}
+  - {url: 'https://status.wingtra.com/', http_status: 0, note: DNS did not resolve}
+  - {url: 'https://wingtra.com/roadmap/', http_status: 404}

@@ -1,0 +1,648 @@
+# generated: '2026-09-04'
+# method: probed
+# source: https://api.my.wingtra.com/graphql
+# note: >-
+#   Rendered verbatim from a full anonymous GraphQL introspection query issued against
+#   https://api.my.wingtra.com/graphql on 2026-09-04 (HTTP 200). No credentials of any kind
+#   were used; the endpoint answers __schema to unauthenticated callers. Wingtra publishes no
+#   developer portal, API reference or schema download for this API, so this SDL is a
+#   rendering of what the endpoint itself returns, not a transcription of documentation.
+#   84 types, 38 query fields, 33 mutation fields.
+# ownership: >-
+#   api.my.wingtra.com is a Wingtra AG subdomain and the endpoint the provider's own
+#   my.wingtra.com customer/partner portal calls. The schema names Wingtra products
+#   throughout (WingtraCare plans, WingtraRay payload options, Wingtra drone licences,
+#   Sky/WingtraCLOUD SSO tokens), so the contract describes Wingtra's own product, not a
+#   sibling brand or a vendor platform.
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+enum ContactPropertyEnum {
+  AUSTRALIA_STATES
+  CANADA_PROVINCES
+  COMPANY_PROFILE
+  COUNTRY
+  FIRST_HEARD_ABOUT_WINGTRA
+  FIRST_HEARD_ABOUT_WINGTRA_ADVERTISING
+  FIRST_HEARD_ABOUT_WINGTRA_DIRECT_CONTACT
+  FIRST_HEARD_ABOUT_WINGTRA_EVENT_FAIR_OR_DEMO
+  FIRST_HEARD_ABOUT_WINGTRA_OFFLINE_MEDIA
+  FIRST_HEARD_ABOUT_WINGTRA_ONLINE_RESEARCH
+  FIRST_HEARD_ABOUT_WINGTRA_OTHER
+  FIRST_HEARD_ABOUT_WINGTRA_SOCIAL_MEDIA
+  FIRST_HEARD_ABOUT_WINGTRA_WORD_MOUTH
+  US_STATES
+  WINGTRA_INDUSTRY
+}
+
+enum ContactTypeEnum {
+  END_USER
+  RESELLER
+}
+
+enum DronePathEnum {
+  ALREADY_CONFIGURED
+  BACKUP_WING
+  DEACTIVATED_END_USER_LICENSE
+  LEGACY_LICENSE
+  NEW_SALE_UNIT
+  NO_RESELLER_CONFIGURATION_LICENCE
+  REPLACEMENT_PAID
+  REPLACEMENT_UNDER_WARRANTY
+}
+
+enum DroneSuccessCaseEnum {
+  IMMEDIATELY
+  WHEN_CUSTOMER_ACTIVATE
+}
+
+enum DroneTypeEnum {
+  ALREADY_CONFIGURED_BY_CUSTOMER
+  BACKUP_WING
+  DEMO_UNIT
+  FULL_BUNDLE_REPLACEMENT_PAID
+  FULL_BUNDLE_REPLACEMENT_WARRANTY
+  NEW_SALE
+  WING_ONLY_REPLACEMENT_PAID
+  WING_ONLY_REPLACEMENT_WARRANTY
+}
+
+enum DroneTypesEnum {
+  ALREADY_CONFIGURED
+  BACKUP_WING
+  DEACTIVATED_END_USER_LICENSE
+  DECOMMISSIONED
+  DEMO_UNIT
+  LEGACY_LICENSE
+  NEW_SALE_UNIT
+  NO_RESELLER_CONFIGURATION_LICENCE
+  REPLACEMENT_PAID
+  REPLACEMENT_UNDER_WARRANTY
+}
+
+enum LicensePropertyEnum {
+  BLUE_LICENSE_TYPE
+  PPK_LICENSE_TYPE
+  TMP_START_DATE
+  TYPE
+}
+
+input AlreadyRegisteredPayloadsInput {
+  contactId: String!
+  replacedDroneContactId: String
+}
+
+input CannyTokenInput {
+  email: String!
+  id: String!
+  name: String!
+}
+
+input CheckDronesIdInput {
+  contactId: String!
+  drones: [String!]!
+}
+
+input CheckEmailDomainsInput {
+  emails: [String!]!
+  isPartner: Boolean!
+}
+
+input CheckIfDroneConfiguredBySameDealerInput {
+  contactId: String!
+  droneId: String!
+}
+
+input CheckIfLicenseAllowedInput {
+  alternativePpkLicenseType: String
+  blueLicenseType: String
+  contactId: String!
+  licenseId: String!
+  lidarLicenseType: String
+  ppkLicenseType: String
+  type: String!
+}
+
+input CreateResellerInput {
+  id: String!
+  subscribeNewsletter: Boolean
+  tenantId: String
+  userInfo: SignUpUserInput!
+  whatRoleDescribesYourBest: [WhatRoleDescribesYourBestPropertyInput!]!
+}
+
+input CreateUserInput {
+  companyIndustry: PropertyInput
+  companyProfile: PropertyInput
+  firstHeardAboutWingtra: PropertyInput
+  firstHeardAboutWingtraDetails: MarketingDataDetailsInput
+  id: String!
+  subscribeNewsletter: Boolean
+  tenantId: String
+  userInfo: SignUpUserInput!
+  whatRoleDescribesYourBest: [WhatRoleDescribesYourBestPropertyInput!]!
+}
+
+input DroneTypeInput {
+  blueLicenses: [String!]!
+  contactId: String!
+  lidarLicenses: [String!]!
+  type: DroneTypeEnum!
+}
+
+input GetAvailableLicensesInput {
+  alternativePpkLicenseType: String
+  blueLicenseType: String
+  contactId: String!
+  lidarLicenseType: String
+  ppkLicenseType: String
+  type: String!
+}
+
+input GetContactInput {
+  contactId: String!
+  properties: [String!]!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
+input MarketingDataDetailsInput {
+  data: PropertyInput!
+  propertyName: ContactPropertyEnum!
+}
+
+input OnSuccessDroneSetupInput {
+  blueLicenses: [String!]!
+  contactId: String!
+  droneContactId: String!
+  lidarLicenses: [String!]!
+}
+
+input OnSuccessDronesSetupInput {
+  contactId: String!
+  drones: [DroneTypeInput!]!
+}
+
+input PersonalInfoInput {
+  australia_states: String
+  canada_provinces: String
+  company: String
+  contact_type: ContactTypeEnum!
+  country: String
+  email: String!
+  firstname: String!
+  lastname: String!
+  phone: String
+  tenantId: String
+  us_state: String
+}
+
+input PropertyInput {
+  label: String!
+  value: String!
+}
+
+input RegisterPartnerPayloadsInput {
+  case: DroneTypeEnum
+  contactId: String!
+  droneContactId: String!
+  payloads: [String!]!
+}
+
+input RegisterPayloadsInput {
+  case: DronePathEnum
+  contactId: String!
+  droneContactId: String!
+  payloads: [String!]!
+}
+
+input SaveLicensesConfigurationInput {
+  assignedLicenses: [String!]!
+  contactId: String!
+  droneContactId: String!
+  removedLicenses: [String!]!
+  replacedDroneContactId: String
+  tmpStartDates: [TmpStartDateResponse!]
+  transferredLicenses: [String!]
+  type: DroneTypeEnum!
+}
+
+input SaveSatisfactionInput {
+  comment: String!
+  contactId: String!
+  droneContactId: String!
+  salesProcessRating: String!
+  wingtraPartnerRating: String!
+}
+
+input SignUpUserInput {
+  contactId: String!
+  contact_type: ContactTypeEnum!
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String!
+}
+
+input TmpStartDateResponse {
+  licenseId: String!
+  tmpStartDate: String!
+}
+
+input TokenInput {
+  email: String!
+}
+
+input UpdateCountryInput {
+  country: String!
+  state: String
+  tenantId: String!
+}
+
+input UpdateDroneLicensesInput {
+  assignedLicenses: [String!]!
+  contactId: String!
+  droneContactId: String!
+  removedLicenses: [String!]!
+  replacedDroneContactId: String
+  tmpStartDates: [TmpStartDateResponse!]
+  transferredLicenses: [String!]
+  type: DronePathEnum!
+}
+
+input UpdateDroneWingtraCarePlanInput {
+  droneId: String!
+  wingtraCarePlan: Boolean!
+}
+
+input UpdateDroneWithReplacementInput {
+  contactId: String!
+  droneContactId: String!
+  droneType: DroneTypeEnum!
+  replacedDroneContactId: String
+}
+
+input VerifyEmailInput {
+  userId: String!
+  verificationCode: String!
+}
+
+input WhatRoleDescribesYourBestPropertyInput {
+  contactFunction: String!
+  label: String!
+  value: String!
+}
+
+type AlreadyRegisteredPayloadResponse {
+  activationDate: String
+  contactId: String!
+  type: String
+  wingtraRayType: String
+}
+
+type AlreadyRegisteredPayloadsPartnerResponse {
+  droneContactId: String!
+  payloads: [AlreadyRegisteredPayloadResponse!]!
+}
+
+type AppMetadata {
+  hs_object_id: String
+  stiggId: String
+  tenantId: String
+}
+
+type CheckDroneCodeAndGetPathResponse {
+  error: String!
+  path: DronePathEnum
+}
+
+type CheckDroneResponse {
+  droneContactId: String
+  error: String!
+}
+
+type CheckDronesIdResponse {
+  errors: [DroneErrorResponse!]!
+  informationScreenDrones: [InformationScreenDronesResponse!]!
+  next: Boolean!
+  showInformationScreen: Boolean!
+}
+
+type CheckEmailsOutput {
+  isValidEmails: Boolean!
+}
+
+type CheckIfLicenseAllowedResponse {
+  error: String!
+  expirationDate: String
+  licenseKey: String
+}
+
+type CheckIsDroneAvailableResponse {
+  available: Boolean
+  error: String
+}
+
+type ChildCompaniesResponse {
+  companies: [CompaniesResponse!]!
+  formTitle: String!
+}
+
+type CompaniesResponse {
+  id: String!
+  name: String!
+}
+
+type CompanyResponse {
+  id: String!
+  name: String!
+}
+
+type CreateCustomerResponse {
+  customerId: String!
+}
+
+type CreateTestDroneResponse {
+  hubspotId: String!
+  vehicleId: String!
+}
+
+type DroneErrorResponse {
+  droneId: String!
+  error: String!
+}
+
+type DroneResponse {
+  contactId: String!
+  droneStatus: String
+  firstName: String!
+  hasResellerConfig: Boolean
+  isDemoUnit: Boolean
+  isGenOnePPK: Boolean!
+  lastName: String!
+  replacedDroneContactId: String
+  replacedDroneId: String
+  replacedDroneLastName: String
+  replacedDroneStatus: String
+}
+
+type ErrorResponse {
+  error: String!
+}
+
+type ForgotPasswordResponse {
+  error: String!
+}
+
+type GetContactOutput {
+  archived: Boolean!
+  archivedAt: DateTime!
+  createdAt: DateTime!
+  id: String!
+  properties: [Property!]!
+  updatedAt: DateTime!
+}
+
+type GetDroneLicenseResponse {
+  ActivationCode: String
+  ActivationConfirmationDate: String
+  ActiveLidarPayloadID: String
+  EncryptTelemetry: String
+  EnduserActivated: String
+  IsDemoUnit: String
+  LastUpdated: String
+  PPKLicense: String
+  VehicleId: String
+  hasResellerConfig: String
+}
+
+type GetDronesByCodesResponse {
+  contactId: String!
+  droneStatus: String
+  firstName: String!
+  isGenOnePPK: Boolean!
+  lastName: String!
+  replacedDroneContactId: String
+  replacedDroneId: String
+  replacedDroneLastName: String
+}
+
+type GetLicensesAssociatedWithDrones {
+  associatedLicenses: [LicenseResponse!]!
+  droneContactId: String!
+}
+
+type GetLicensesConfigurationResponse {
+  assignedLicenses: [LicenseResponse!]!
+  droneContactId: String!
+  removedLicenses: [LicenseResponse!]!
+  replacedDrone: String
+  replacedDroneContactId: String
+  resellerContactId: String!
+  transferredLicenses: [LicenseResponse!]
+}
+
+type GetTenantCountryOutput {
+  country: String!
+  state: String
+}
+
+type IdResponse {
+  id: String!
+}
+
+type Identity {
+  connection: String
+  isSocial: Boolean
+  provider: String
+  user_id: String
+}
+
+type InformationScreenDronesResponse {
+  error: String!
+  firstname: String!
+  lastname: String!
+}
+
+type IsPartnerResponse {
+  isPartner: Boolean!
+}
+
+type LicensePropertyResponse {
+  description: String!
+  displayOrder: Int!
+  hidden: Boolean!
+  label: String!
+  value: String!
+}
+
+type LicenseResponse {
+  blueLicenseType: String
+  contactId: String!
+  expirationDate: String
+  lidarLicenseType: String
+  ppkLicenseType: String
+  tmpStartDate: String
+  type: String!
+}
+
+type LoginResponse {
+  access_token: String!
+  assigned_roles: [String!]
+  expires_in: String!
+  refresh_token: String!
+  scope: String!
+  token_type: String!
+  user_info: UserInfoOutput!
+}
+
+type Mutation {
+  checkEmailsDomains(checkEmailDomainsInput: CheckEmailDomainsInput!): CheckEmailsOutput!
+  checkIfUserExists(email: String!): User
+  checkPartnerEmailDomain(email: String!): ErrorResponse!
+  checkUserEmailDomain(email: String!): ErrorResponse!
+  createCustomer(email: String!): CreateCustomerResponse!
+  createTestDrone(contactId: String!, droneType: DroneTypesEnum!, vehicleId: String): CreateTestDroneResponse!
+  disableLicenseForActivatedDrone(contactId: String!, droneId: String!, isLegacyLicense: Boolean!): CreateTestDroneResponse!
+  forgotPassword(email: String!): ForgotPasswordResponse!
+  getCompaniesByEmailDomain(email: String!): [CompanyResponse!]!
+  login(loginUserInput: LoginUserInput!): LoginResponse!
+  onSuccessDronesSetup(data: OnSuccessDronesSetupInput!): NextResponse!
+  onSuccessUserDroneSetup(data: OnSuccessDroneSetupInput!): NextResponse!
+  refreshToken(token: String!): LoginResponse!
+  registerPartnerPayloads(data: [RegisterPartnerPayloadsInput!]!): [RegisterPartnerPayloadsResponse!]!
+  registerPayloads(data: RegisterPayloadsInput!): Void
+  saveCompanyIndustry(data: PropertyInput!, id: String!): IdResponse!
+  saveCompanyProfile(data: PropertyInput!, id: String!): IdResponse!
+  saveContactCompanyOffice(company: String, companyId: String, contactId: String!): Void
+  saveLicensesConfiguration(data: [SaveLicensesConfigurationInput!]!): Void
+  savePersonalInfo(personalInfo: PersonalInfoInput!): IdResponse!
+  saveResellerData(data: CreateResellerInput!): IdResponse!
+  saveSatisfaction(data: SaveSatisfactionInput!): Void
+  saveUserData(data: CreateUserInput!): IdResponse!
+  saveWhatRoleDescribesYourBest(data: [WhatRoleDescribesYourBestPropertyInput!]!, id: String!): IdResponse!
+  sendEmailVerification(userId: String!): Void
+  signUp(signUpUserInput: SignUpUserInput!): SignUpResponse!
+  updateDroneWingtraCarePlan(data: UpdateDroneWingtraCarePlanInput!): ErrorResponse!
+  updateDrones(data: [UpdateDroneWithReplacementInput!]!): Void
+  updatePreviouslyConfiguredDrones(drones: [String!]!): Void
+  updateTenantCountry(data: UpdateCountryInput!): GetTenantCountryOutput
+  updateUserDrone(data: UpdateDroneLicensesInput!): IdResponse!
+  verifyEmailByCode(verifyEmailInput: VerifyEmailInput!): ErrorResponse!
+  verifyUserEmail(userId: String!): Void
+}
+
+type NextResponse {
+  next: Boolean!
+}
+
+type Property {
+  key: String
+  value: String
+}
+
+type PropertyResponse {
+  description: String!
+  displayOrder: Int!
+  hidden: Boolean!
+  label: String!
+  value: String!
+}
+
+type Query {
+  canGoToTheOfficesPage(id: String!): NextResponse!
+  checkDroneCodeAndGetPath(droneContactId: String!): CheckDroneCodeAndGetPathResponse!
+  checkDroneSetupCode(code: String!): ErrorResponse!
+  checkDronesId(data: CheckDronesIdInput!): CheckDronesIdResponse!
+  checkIfDroneConfiguredBySameDealer(data: CheckIfDroneConfiguredBySameDealerInput!): CheckDroneResponse!
+  checkIfDroneEligibleForPaidReplacement(data: CheckIfDroneConfiguredBySameDealerInput!): CheckDroneResponse!
+  checkIfDroneEligibleForReplacementUnderWarranty(data: CheckIfDroneConfiguredBySameDealerInput!): CheckDroneResponse!
+  checkIfEmptyWingEligibleForPaidReplacement(data: CheckIfDroneConfiguredBySameDealerInput!): CheckDroneResponse!
+  checkIfEmptyWingEligibleForReplacementUnderWarranty(data: CheckIfDroneConfiguredBySameDealerInput!): CheckDroneResponse!
+  checkIfLicenseAllowed(data: CheckIfLicenseAllowedInput!): CheckIfLicenseAllowedResponse!
+  checkIfSatisfactionWasFilled(droneId: String!): NextResponse!
+  checkIfUserLicenseAllowed(data: CheckIfLicenseAllowedInput!): CheckIfLicenseAllowedResponse!
+  checkIsDroneAvailable(droneContactId: String!): CheckIsDroneAvailableResponse!
+  getAlreadyRegisteredPayloads(dronesId: [String!]!): [AlreadyRegisteredPayloadResponse!]!
+  getAlreadyRegisteredPayloadsPartner(drones: [AlreadyRegisteredPayloadsInput!]!): [AlreadyRegisteredPayloadsPartnerResponse!]!
+  getAvailableLicenses(data: GetAvailableLicensesInput!): [LicenseResponse!]!
+  getCannyToken(user: CannyTokenInput!): SsoTokenOutput!
+  getContactById(data: GetContactInput!): GetContactOutput!
+  getContactPrimaryCompanyChildren(id: String!): ChildCompaniesResponse!
+  getContactProperty(name: ContactPropertyEnum!): [PropertyResponse!]!
+  getDistributorToken: SsoTokenOutput!
+  getDroneByContactId(droneContactId: String!): DroneResponse!
+  getDroneLicenseFile(droneContactId: String!): GetDroneLicenseResponse!
+  getDronesByCodes(drones: [String!]!): [GetDronesByCodesResponse!]!
+  getHubspotToken(user: TokenInput!): SsoTokenOutput!
+  getLicenseProperty(name: LicensePropertyEnum!): [LicensePropertyResponse!]!
+  getLicensesAssociatedWithDrone(dronesContactId: [String!]!): [GetLicensesAssociatedWithDrones!]!
+  getLicensesConfiguration(droneContactId: String!): GetLicensesConfigurationResponse
+  getMe(access_token: String!): UserInfoOutput!
+  getPayloadOptions: [PropertyResponse!]!
+  getReplacedDroneLicenses(replacedDronesContactId: [String!]!): [GetLicensesAssociatedWithDrones!]!
+  getSkyToken(user: CannyTokenInput!): SsoTokenOutput!
+  getTenantCountry(tenantId: String!): GetTenantCountryOutput!
+  getThinkificToken: SsoTokenOutput!
+  getUserDrones(contactId: String!): [DroneResponse!]!
+  getUserDronesForSpareWingReplacement(contactId: String!): [DroneResponse!]!
+  getWingtraRayPayloadOptions: [PropertyResponse!]!
+  isResellerTenant(tenantId: String!): IsPartnerResponse!
+}
+
+type RegisterPartnerPayloadsResponse {
+  contactId: String!
+  droneSuccessCase: DroneSuccessCaseEnum!
+}
+
+type SignUpResponse {
+  _id: String!
+  email: String!
+  email_verified: Boolean!
+}
+
+type SsoTokenOutput {
+  token: String!
+}
+
+type User {
+  app_metadata: AppMetadata
+  created_at: String
+  email: String
+  email_verified: Boolean
+  family_name: String
+  given_name: String
+  identities: [Identity]
+  last_ip: String
+  last_login: String
+  logins_count: Float
+  name: String
+  nickname: String
+  picture: String
+  updated_at: String
+  user_id: String
+}
+
+type UserInfoOutput {
+  assigned_roles: [String!]!
+  email: String!
+  email_verified: Boolean!
+  family_name: String!
+  first_login: Boolean!
+  given_name: String!
+  hs_object_id: String!
+  id: String!
+  nickname: String!
+  picture: String!
+  updated_at: String!
+}
+
+scalar DateTime
+
+scalar Void

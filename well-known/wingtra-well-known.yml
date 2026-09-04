@@ -1,0 +1,170 @@
+generated: '2026-09-04'
+method: probed
+source: https://my-wingtra.eu.auth0.com/.well-known/openid-configuration
+notes: >-
+  Nine named /.well-known/ paths were probed on every host this record knows: the registrable
+  domain and www, the two API hosts named by Wingtra's own WingtraCLOUD web client
+  (api.sky.wingtra.com, api.my.wingtra.com), the updater host, the three browser front ends
+  (cloud.wingtra.com, my.wingtra.com, portal.wingtra.com), the knowledge base, the self-hosted
+  Unleash instance, and the Auth0 tenant that portal.wingtra.com's own 302 names as its
+  authorization server. Only two documents were served, both by the my-wingtra Auth0 tenant.
+  Every host was control-probed with /.well-known/zzz-nonexistent-abc123 first:
+  my.wingtra.com and unleash.wingtra.com answer 200 with an SPA/app shell for ANY
+  /.well-known/* path, so their nine 200s are soft-404s and are recorded as misses, not
+  documents. Wingtra serves no security.txt, no api-catalog, no ai-plugin.json, no agent card
+  and no aauth-resource.json on any host.
+hosts:
+- host: wingtra.com
+  role: registrable domain / marketing site
+  control_probe: {path: /.well-known/zzz-nonexistent-abc123, status: 404}
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/aauth-resource.json, status: 404}
+- host: www.wingtra.com
+  role: www alias (301s to the apex)
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: my-wingtra.eu.auth0.com
+  role: >-
+    Wingtra's Auth0 tenant — the authorization server portal.wingtra.com redirects to by name.
+    Probed because a fetched discovery/redirect document named it, not by guessing.
+  control_probe: {path: /.well-known/zzz-nonexistent-abc123, status: 404}
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    content_type: application/json
+    file: wingtra-openid-configuration.json
+    description: >-
+      OpenID Connect discovery for the my-wingtra tenant — issuer, authorize/token/userinfo/
+      revoke/jwks endpoints, 14 supported scopes, PKCE S256, device code and MFA endpoints.
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    file: wingtra-oauth-authorization-server.json
+    description: >-
+      RFC 8414 authorization server metadata. Byte-identical to the OIDC discovery document.
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/aauth-resource.json, status: 404}
+- host: api.my.wingtra.com
+  role: customer/partner portal GraphQL API host
+  control_probe: {path: /.well-known/zzz-nonexistent-abc123, status: 404}
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /.well-known/aauth-resource.json, status: 404}
+- host: api.sky.wingtra.com
+  role: WingtraCLOUD REST API host
+  documents:
+  - {path: /.well-known/security.txt, status: 400}
+  - {path: /.well-known/openid-configuration, status: 400}
+  - {path: /.well-known/oauth-authorization-server, status: 400}
+  - {path: /.well-known/oauth-protected-resource, status: 400}
+  - {path: /.well-known/api-catalog, status: 400}
+  - {path: /.well-known/ai-plugin.json, status: 400}
+  - {path: /.well-known/agent-card.json, status: 400}
+  - {path: /.well-known/agent.json, status: 400}
+  note: >-
+    This host answers every unauthenticated request, including the API's own documented /v1
+    paths, with HTTP 400 "Something went wrong." from an edge in front of the application.
+    The 400s are therefore a gate, not evidence that the paths are unrouted.
+- host: cloud.wingtra.com
+  role: WingtraCLOUD browser client (S3/CloudFront)
+  documents:
+  - {path: /.well-known/security.txt, status: 403}
+  - {path: /.well-known/openid-configuration, status: 403}
+  - {path: /.well-known/api-catalog, status: 403}
+  - {path: /.well-known/agent-card.json, status: 403}
+  - {path: /.well-known/agent.json, status: 403}
+  note: The origin bucket returns S3 AccessDenied XML for any unmapped key.
+- host: my.wingtra.com
+  role: customer and partner portal front end
+  control_probe:
+    path: /.well-known/zzz-nonexistent-abc123
+    status: 200
+    body: HTML app shell
+    verdict: catch-all — every /.well-known/* path returns 200 with the same shell
+  documents:
+  - {path: /.well-known/security.txt, status: 200, verdict: soft-404 HTML shell, document: false}
+  - {path: /.well-known/openid-configuration, status: 200, verdict: soft-404 HTML shell, document: false}
+  - {path: /.well-known/oauth-authorization-server, status: 200, verdict: soft-404 HTML shell, document: false}
+  - {path: /.well-known/api-catalog, status: 200, verdict: soft-404 HTML shell, document: false}
+  - {path: /.well-known/ai-plugin.json, status: 200, verdict: soft-404 HTML shell, document: false}
+  - {path: /.well-known/agent-card.json, status: 200, verdict: soft-404 HTML shell, document: false}
+  - {path: /.well-known/agent.json, status: 200, verdict: soft-404 HTML shell, document: false}
+  - {path: /.well-known/aauth-resource.json, status: 200, verdict: soft-404 HTML shell, document: false}
+- host: portal.wingtra.com
+  role: partner/distributor portal — Auth0 session gate on every path
+  documents:
+  - {path: /.well-known/security.txt, status: 302, note: redirects to /api/auth/login}
+  - {path: /.well-known/openid-configuration, status: 302, note: redirects to /api/auth/login}
+  - {path: /.well-known/oauth-authorization-server, status: 302, note: redirects to /api/auth/login}
+  - {path: /.well-known/api-catalog, status: 302, note: redirects to /api/auth/login}
+  - {path: /.well-known/agent-card.json, status: 429, note: Auth0 rate-limit page reached through the login redirect}
+- host: knowledge.wingtra.com
+  role: HubSpot-hosted knowledge base
+  control_probe: {path: /.well-known/zzz-nonexistent-abc123, status: 404}
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: api.updater.wingtra.com
+  role: firmware/software updater API host
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: unleash.wingtra.com
+  role: self-hosted Unleash feature-flag instance (third-party software on a Wingtra host)
+  control_probe:
+    path: /.well-known/zzz-nonexistent-abc123
+    status: 200
+    body: HTML app shell
+    verdict: catch-all — the Unleash SPA answers 200 for any unmatched path
+  documents:
+  - {path: /.well-known/security.txt, status: 200, verdict: soft-404 HTML shell, document: false}
+  - {path: /.well-known/openid-configuration, status: 200, verdict: soft-404 HTML shell, document: false}
+  - {path: /.well-known/api-catalog, status: 200, verdict: soft-404 HTML shell, document: false}
+  - {path: /.well-known/agent-card.json, status: 200, verdict: soft-404 HTML shell, document: false}
+  - {path: /.well-known/agent.json, status: 200, verdict: soft-404 HTML shell, document: false}
+summary:
+  hosts_probed: 11
+  documents_served: 2
+  security_txt: false
+  api_catalog: false
+  agent_card: false
+  ai_plugin: false
+x-evidence:
+  fetched: '2026-09-04'
+  probes:
+  - {url: 'https://my-wingtra.eu.auth0.com/.well-known/openid-configuration', http_status: 200}
+  - {url: 'https://my-wingtra.eu.auth0.com/.well-known/oauth-authorization-server', http_status: 200}
+  - {url: 'https://wingtra.com/.well-known/security.txt', http_status: 404}
+  - {url: 'https://wingtra.com/.well-known/agent-card.json', http_status: 404}
+  - {url: 'https://my.wingtra.com/.well-known/zzz-nonexistent-abc123', http_status: 200}

@@ -1,0 +1,169 @@
+generated: '2026-09-04'
+method: derived
+source:
+- graphql/wingtra-my-portal.graphql
+- https://api.my.wingtra.com/graphql
+- https://cloud.wingtra.com/index-Cb28BT7p-production.js
+- authentication/wingtra-authentication.yml
+note: >-
+  Wingtra publishes no API conventions document, no reference and no developer portal, so
+  everything here is derived from the introspected GraphQL schema and from the request
+  shapes its own public WingtraCLOUD web client bundle performs. Nothing below is quoted
+  from documentation, because none exists.
+authentication:
+  style: >-
+    Auth0 OIDC for humans; bearer JWT for the portal GraphQL API, obtainable either from
+    the tenant or from the API's own login mutation. WingtraCLOUD REST auth is not
+    determinable anonymously.
+  detail: authentication/wingtra-authentication.yml
+idempotency:
+  coverage: none
+  supported: false
+  header: null
+  scope: []
+  retention: null
+  detail: >-
+    No idempotency mechanism exists on either surface. The GraphQL schema declares 33
+    mutations and not one accepts an idempotency key, request id, client-supplied token or
+    any other de-duplication argument; there is no Idempotency-Key convention in the
+    WingtraCLOUD client's request construction either. Replay protection, where it exists
+    at all, is incidental — a mutation such as registerPayloads is guarded by server-side
+    state (the payload is already registered) rather than by a key. An agent that retries a
+    failed mutation has no contract-level protection against acting twice. No `Idempotency`
+    pointer is emitted, and the machine verdict is `none`.
+reversibility:
+  grade: undocumented
+  applicable: true
+  detail: >-
+    The API has a substantial write surface — 33 mutations spanning drone setup, licence
+    assignment and transfer, payload registration, WingtraCARE plan changes, tenancy and
+    company profile edits, and account creation — so reversibility is applicable and cannot
+    be marked `na`. Wingtra documents no reversal path and no window for any of them. Two
+    mutations read as reversals of a specific prior state change and are recorded as
+    schema-level evidence only, with no window, because no documentation states one.
+  reversals:
+  - operation: disableLicenseForActivatedDrone
+    reverses: an activated drone licence
+    operation_id: Mutation.disableLicenseForActivatedDrone
+    window: null
+    window_source: null
+    grade: documented
+    note: >-
+      Name and argument shape make the intent unambiguous, but nothing published states
+      whether a disabled licence can be re-enabled, by whom, or within what period.
+  - operation: updatePreviouslyConfiguredDrones
+    reverses: an earlier drone configuration
+    operation_id: Mutation.updatePreviouslyConfiguredDrones
+    window: null
+    window_source: null
+    grade: documented
+    note: A re-configuration path, not a stated undo with a bounded window.
+  irreversible_or_unknown:
+  - {operation: createCustomer, note: No delete or deactivate mutation exists in the schema.}
+  - {operation: signUp, note: No account-deletion mutation exists in the schema.}
+  - {operation: registerPayloads, note: No unregister mutation exists in the schema.}
+  - {operation: saveLicensesConfiguration, note: Superseded by later saves; no explicit revert.}
+  warning: >-
+    No window in this file is asserted, because Wingtra states none. An agent must treat
+    every mutation here as one-way until the provider publishes otherwise.
+dry_run_mode:
+  supported: false
+  detail: >-
+    No mutation takes a dryRun, preview, validate or simulate argument. The closest thing
+    is a family of read-only `check*` queries — checkDroneSetupCode, checkIsDroneAvailable,
+    checkIfLicenseAllowed, checkIfDroneEligibleForReplacementUnderWarranty,
+    checkIfEmptyWingEligibleForPaidReplacement and eight more — which let a caller test
+    eligibility before it mutates. That is a pre-flight validation surface, not a dry-run
+    of the write itself: it does not return what the mutation would do.
+pagination:
+  style: none
+  request_params: []
+  response_fields: []
+  detail: >-
+    No pagination exists anywhere in the schema. No Relay connection type, no
+    first/after/last/before arguments, no pageInfo, no limit/offset. Every list-returning
+    field returns a complete array. Collections are naturally small — a customer's drones,
+    a drone's licences — so the omission is consistent, but it means an unbounded response
+    for a large reseller tenant.
+field_selection:
+  mechanism: GraphQL selection sets
+  sparse_fieldsets: native
+  expansion: >-
+    Nested objects are traversed in the selection set; there is no separate expand
+    parameter. This is the one agent-affordance the API gets for free from GraphQL.
+metadata:
+  custom_fields: >-
+    Contact and licence attributes are exposed as generic key/value Property objects
+    (Property, PropertyResponse, LicensePropertyResponse) selected by a ContactPropertyEnum
+    or LicensePropertyEnum, rather than as typed fields. The enum is the closed list of
+    what may be read.
+request_tracing:
+  request_id_header: null
+  detail: >-
+    No request or correlation id is returned on the probed 200. Observed response headers
+    were Server, X-Powered-By and the CORS pair only. An agent has no handle to quote to
+    support when a call misbehaves.
+versioning:
+  api_surfaces:
+  - surface: portal-graphql
+    scheme: none
+    current: null
+    detail: >-
+      The GraphQL endpoint is unversioned — no path segment, no header, no dated train, and
+      no @deprecated directive on any of the 84 types. Breaking changes would arrive
+      unannounced.
+  - surface: wingtracloud-rest
+    scheme: path prefix
+    current: v1
+    detail: Every path the client calls is prefixed /v1. No other version is observable.
+  product_release_train: changelog/wingtra-changelog.yml
+  detail: lifecycle/wingtra-lifecycle.yml
+error_envelope:
+  format: graphql-errors
+  fields: [message, locations, path, extensions]
+  rfc9457: false
+  typed_error_results: true
+  detail: errors/wingtra-problem-types.yml
+  note: >-
+    Alongside the standard GraphQL errors[] array the schema models expected failures as
+    data: ErrorResponse { error } and DroneErrorResponse { droneId, error } are returned
+    inside union-like response objects, so a business failure arrives as a 200 with an
+    `error` string rather than as a transport error.
+rate_limit_signaling:
+  documented: false
+  headers: []
+  detail: rate-limits/wingtra-rate-limits.yml
+transport:
+  protocol: HTTPS
+  graphql:
+    endpoint: https://api.my.wingtra.com/graphql
+    methods: [POST]
+    get_supported: false
+    note: 'GET returns 400 "GET query missing."'
+    server: 'nginx / Express (X-Powered-By)'
+  rest:
+    base: https://api.sky.wingtra.com
+    version_prefix: /v1
+    resource_groups:
+    - coordinates (systems, custom, transformations: definitions, properties, calibration, transform, transform2d, validate)
+    - sites (list, metadata)
+    - flights (list, duplicate, available-equipment)
+    - drones (list, metadata, sync-drones)
+    - layers
+    - jobs (list, sync/status)
+    - files (register, file-keys, upload/presigned-url, start-archiving, archiving-results, survey-outcomes/register)
+    - sharing (files/start-archiving)
+    - tenants (check, check-name, csv-formats, getUser, getAuth0User, getSoftDeletionDelayDays)
+    source_of_paths: >-
+      Read from the provider's own publicly served WingtraCLOUD JavaScript bundle at
+      cloud.wingtra.com. This is an inventory of routes the client calls, NOT a contract:
+      no method, parameter, request body, response schema or status code is claimed for any
+      of them, and no OpenAPI was authored from it. Every one of these paths returns 400 to
+      an unauthenticated caller.
+cross_references:
+  authentication: authentication/wingtra-authentication.yml
+  scopes: scopes/wingtra-scopes.yml
+  errors: errors/wingtra-problem-types.yml
+  lifecycle: lifecycle/wingtra-lifecycle.yml
+  rate_limits: rate-limits/wingtra-rate-limits.yml
+  data_model: data-model/wingtra-data-model.yml

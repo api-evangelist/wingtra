@@ -1,0 +1,35 @@
+generated: '2026-09-04'
+method: searched
+source:
+- https://api.my.wingtra.com/mcp
+- https://api.sky.wingtra.com/mcp
+- https://wingtra.com/mcp
+- https://cloud.wingtra.com/mcp
+status: none
+note: >-
+  Wingtra ships no MCP server, hosted or local. tools/list was POSTed to /mcp on
+  api.my.wingtra.com (404), api.sky.wingtra.com (400), wingtra.com (404) and
+  cloud.wingtra.com (403); mcp.wingtra.com does not resolve. There is no npm or PyPI package
+  under any Wingtra name, no MCP reference in the knowledge base, and no /.well-known
+  discovery document naming one. NO CANDIDATE TOOL LIST WAS DERIVED. The only contract that
+  could seed one is the customer/partner portal GraphQL API, which Wingtra does not
+  document, does not offer to third parties, and whose 33 mutations create accounts, assign
+  and disable drone licences and change WingtraCARE plans — deriving agent tools from it
+  would publish an interface to a private back end that the provider has not offered. The
+  honest artifact here is a recorded absence. No `MCPServer` pointer is emitted.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: probed
+probes:
+- {url: 'https://api.my.wingtra.com/mcp', method: POST, body: 'jsonrpc tools/list', http_status: 404}
+- {url: 'https://api.sky.wingtra.com/mcp', method: POST, body: 'jsonrpc tools/list', http_status: 400}
+- {url: 'https://wingtra.com/mcp', method: POST, body: 'jsonrpc tools/list', http_status: 404}
+- {url: 'https://cloud.wingtra.com/mcp', method: POST, body: 'jsonrpc tools/list', http_status: 403}
+- {url: 'https://mcp.wingtra.com/mcp', method: POST, http_status: 0, note: DNS did not resolve}
+tools: []
+x-evidence:
+  fetched: '2026-09-04'

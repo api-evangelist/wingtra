@@ -1,0 +1,38 @@
+generated: '2026-09-04'
+method: probed
+source:
+- https://api.my.wingtra.com/graphql
+- https://portal.wingtra.com/
+docs: null
+limit_count: 0
+documented: false
+note: >-
+  Wingtra documents no rate limit for any API surface — there is no developer portal, API
+  reference or terms page that states a quota, window or burst. A live anonymous POST to
+  https://api.my.wingtra.com/graphql returned HTTP 200 and carried no RateLimit-*,
+  X-RateLimit-* or Retry-After header at all; the only response headers of note were
+  Server: nginx, X-Powered-By: Express and Access-Control-Allow-Origin: *. An agent calling
+  this API has no runtime budget signal whatsoever and can only discover a limit by tripping
+  one. limit_count is an honest zero.
+limits: []
+response_headers:
+  observed: []
+  ratelimit_standard: absent
+  retry_after: absent
+  note: No rate-limit headers were returned on the probed 200.
+exhaustion:
+  status_code: unknown
+  body: unknown
+observed_throttling:
+- surface: portal.wingtra.com (Auth0 hosted login)
+  status: 429
+  note: >-
+    Repeated probes of portal.wingtra.com/.well-known/* followed the Auth0 login redirect
+    and drew a 429 from Auth0's own rate limiter, served as an HTML error page. That is the
+    identity vendor's limit on the login endpoint, not a documented Wingtra API limit, and
+    it is recorded here only so the observation is not mistaken for a published policy.
+x-evidence:
+  fetched: '2026-09-04'
+  probes:
+  - {url: 'https://api.my.wingtra.com/graphql', http_status: 200, note: 'POST {__typename}, no rate-limit headers returned'}
+  - {url: 'https://portal.wingtra.com/.well-known/agent-card.json', http_status: 429}

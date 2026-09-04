@@ -1,0 +1,59 @@
+generated: '2026-09-04'
+method: searched
+source: https://wingtra.com/software/plans/
+docs: https://wingtra.com/software/plans/
+plan_count: 3
+currency: null
+billing_period: null
+pricing_published: false
+note: >-
+  Wingtra publishes a three-tier software plan comparison with a full feature and storage
+  matrix, but no price for any tier and no currency, billing period, overage rate or quota
+  beyond storage. The page ends in a "Talk to our team" contact form
+  (https://wingtra.com/talk-to-our-team/), and /pricing/ does not exist (404). Software is
+  sold with the aircraft through Wingtra and its distributor network, so every price is a
+  quote. plan_count is 3 because the tiers are real and named; every price field is null
+  because none is published — not because it was not checked.
+plans:
+- name: WingtraESSENTIAL
+  price: null
+  currency: null
+  billing_period: null
+  included_storage: 40 GB
+  overage: null
+  note: >-
+    Included with every drone. Online and offline flight planning, KML import, mission
+    viewing, PPK corrections, coordinate transformations, geotagging without upload, EXIF
+    export to third-party processing software.
+- name: WingtraPRO
+  price: null
+  currency: null
+  billing_period: null
+  included_storage: 600 GB
+  overage: null
+  note: >-
+    Everything in ESSENTIAL plus advanced 3D flight planning, building views, terrain and
+    LAS import, WMS layer import, GSD and point-cloud-density checking, VLOS verification,
+    mission syncing, WingtraGROUND integration, 6,500+ published coordinate systems, custom
+    transformations, Trimble .T02/.T04 support, orthophoto and point cloud viewing.
+- name: WingtraUNLIMITED
+  price: null
+  currency: null
+  billing_period: null
+  included_storage: 4 TB
+  overage: null
+  note: >-
+    Everything in PRO plus RGB photogrammetry processing inside Wingtra software —
+    orthomosaics, point clouds, digital surface models and 3D mesh — with output editing
+    and sharing.
+api_pricing:
+  published: false
+  note: >-
+    No API plan, key tier, quota or metered price exists for either API surface. Neither
+    api.my.wingtra.com nor api.sky.wingtra.com is sold, and no developer sign-up exists.
+x-evidence:
+  fetched: '2026-09-04'
+  probes:
+  - {url: 'https://wingtra.com/software/plans/', http_status: 200}
+  - {url: 'https://wingtra.com/pricing/', http_status: 404}
+  - {url: 'https://wingtra.com/talk-to-our-team/', http_status: 200}

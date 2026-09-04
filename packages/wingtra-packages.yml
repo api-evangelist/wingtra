@@ -1,0 +1,45 @@
+generated: '2026-09-04'
+method: searched
+source:
+- https://api.github.com/orgs/wingtra/repos
+- https://registry.npmjs.org/-/v1/search?text=wingtra
+- https://pypi.org/pypi/wingtra/json
+- https://crates.io/api/v1/crates?q=wingtra
+- https://wingtra.com/software/
+- https://knowledge.wingtra.com/en
+package_count: 0
+official_package_count: 0
+packages: []
+note: >-
+  Wingtra publishes no client library, SDK or CLI for any of its API surfaces, in any
+  registry. npm search for "wingtra" returns 0 packages, PyPI has no `wingtra` project
+  (404), crates.io returns an empty result set. The github.com/wingtra organization is
+  real (id 11488909, Switzerland, hello@wingtra.com, created 2015-03-15) but holds only
+  12 public repositories and every one of them is a fork or mirror of an upstream project
+  Wingtra consumes rather than a library it authors: PX4-Autopilot, RTKLIB, pyqtgraph,
+  CImg, WiringPi, ESPEC ChamberConnectLibrary, aruizs/unleash-client-cpp, ETH's
+  terrain-navigation, D-FINE and RF-DETR. None carries a Wingtra release or tag, and none
+  is a client for api.my.wingtra.com or api.sky.wingtra.com. No `SDKs` pointer is emitted
+  and sdk_count is honestly zero.
+registries_checked:
+- {registry: npm, query: wingtra, results: 0, status: 200}
+- {registry: pypi, package: wingtra, version: null, status: 404}
+- {registry: crates.io, query: wingtra, results: 0, status: 200}
+- {registry: github, org: wingtra, public_repos: 12, first_party_libraries: 0, status: 200}
+first_party_repositories:
+- name: wingtra/PX4-Autopilot
+  url: https://github.com/wingtra/PX4-Autopilot
+  version: null
+  published: null
+  official: false
+  registry: null
+  note: >-
+    Mirror of PX4/PX4-Autopilot, the flight-stack Wingtra's aircraft are built on. Carries
+    no Wingtra-authored release; recorded because it is the only repo the GitHub API does
+    not flag `fork`, and it is still upstream code, not a Wingtra client library.
+x-evidence:
+  fetched: '2026-09-04'
+  probes:
+  - {url: 'https://api.github.com/orgs/wingtra', http_status: 200}
+  - {url: 'https://registry.npmjs.org/-/v1/search?text=wingtra', http_status: 200}
+  - {url: 'https://pypi.org/pypi/wingtra/json', http_status: 404}

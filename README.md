@@ -64,5 +64,18 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Wingtra is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.nasdaqprivatemarket.com/
+Wingtra AG is a Swiss drone manufacturer in Zürich that builds the WingtraOne GEN II and
+WingtraRAY VTOL tail-sitter mapping drones, their RGB, multispectral and LiDAR payloads, the
+WingtraGROUND GNSS base station, and the WingtraCLOUD software that turns a flight into
+survey-grade output.
+
+Wingtra publishes no developer portal, API reference, SDK or partner API programme. The one
+machine-readable contract in this repository is a GraphQL schema rendered from an anonymous
+introspection query against the customer and partner portal API at `api.my.wingtra.com`, which
+answers `__schema` without credentials. A second REST surface, the WingtraCLOUD API at
+`api.sky.wingtra.com`, is recorded as a real API with no published contract: every
+unauthenticated request to it returns HTTP 400.
+
+- https://wingtra.com/
+- https://knowledge.wingtra.com/en
+- https://github.com/wingtra

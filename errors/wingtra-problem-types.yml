@@ -1,0 +1,76 @@
+generated: '2026-09-04'
+method: derived
+source:
+- graphql/wingtra-my-portal.graphql
+- https://api.my.wingtra.com/graphql
+- https://api.sky.wingtra.com
+format: graphql-errors
+rfc9457: false
+problem_json: false
+note: >-
+  Wingtra publishes no error reference. This catalog is derived from the introspected
+  GraphQL schema and from status codes actually observed on live anonymous probes. There
+  are no error codes to enumerate: the API models failure as a free-text `error` string on
+  a typed response object, so no stable, machine-matchable code vocabulary exists for a
+  client to branch on. That absence is the finding.
+envelopes:
+- id: graphql-errors
+  surface: https://api.my.wingtra.com/graphql
+  transport_status: 200
+  shape:
+    errors:
+    - message: string
+      locations: [{line: int, column: int}]
+      path: [string]
+      extensions: object
+  detail: The standard GraphQL execution error array, returned for parse, validation and
+    resolver errors.
+- id: typed-error-result
+  surface: https://api.my.wingtra.com/graphql
+  transport_status: 200
+  shape:
+    error: string
+  types:
+  - name: ErrorResponse
+    fields: [error]
+    detail: Generic failure carrier returned inside response objects.
+  - name: DroneErrorResponse
+    fields: [droneId, error]
+    detail: >-
+      Per-item failure carrier for the bulk drone operations (updateDrones,
+      onSuccessDronesSetup), so a partial failure names the drone that failed rather than
+      failing the whole batch.
+  detail: >-
+    Expected business failures are returned as data with HTTP 200 and no GraphQL error.
+    A client cannot distinguish success from failure by status code alone; it must inspect
+    the `error` field of each response object.
+- id: nest-http-404
+  surface: https://api.my.wingtra.com
+  transport_status: 404
+  shape: {statusCode: int, message: string, error: string}
+  example: '{"statusCode":404,"message":"Cannot GET /openapi.json","error":"Not Found"}'
+  detail: The NestJS default HTTP exception envelope, returned for unrouted paths.
+- id: sky-edge-400
+  surface: https://api.sky.wingtra.com
+  transport_status: 400
+  shape: text/plain
+  example: Something went wrong.
+  detail: >-
+    An opaque plain-text 400 returned by an edge in front of the WingtraCLOUD API for every
+    unauthenticated request, including its own /v1 routes. It carries no code, no
+    correlation id and no WWW-Authenticate, so a caller cannot tell a missing credential
+    from a malformed request from an unknown route.
+problem_types: []
+error_codes: []
+error_code_count: 0
+gaps:
+- No stable error code or type vocabulary on any surface; `error` is free text.
+- Business failures return HTTP 200, so status-code-driven retry logic is unsafe.
+- No correlation or request id is returned on success or failure.
+- The WingtraCLOUD edge collapses auth, routing and validation failures into one opaque 400.
+x-evidence:
+  fetched: '2026-09-04'
+  probes:
+  - {url: 'https://api.my.wingtra.com/graphql', http_status: 200}
+  - {url: 'https://api.my.wingtra.com/openapi.json', http_status: 404}
+  - {url: 'https://api.sky.wingtra.com/v1/sites', http_status: 400}

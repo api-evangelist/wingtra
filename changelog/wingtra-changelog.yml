@@ -1,0 +1,102 @@
+generated: '2026-09-04'
+method: searched
+source: https://knowledge.wingtra.com/en/wingtracloud-releases-
+docs: https://knowledge.wingtra.com/en/wingtracloud-releases-
+scheme: minor version train with a DD/MM/YY release date
+current_version: v1.66.0
+current_date: '2026-08-31'
+cadence: roughly weekly
+api_specific: false
+note: >-
+  Wingtra maintains dated public release notes in its knowledge base for four product
+  lines. They describe the WingtraCLOUD web application and the Wingtra tablet app, not the
+  API contracts behind them: no entry announces an API change, a schema change, a breaking
+  change or a deprecation. A consumer of api.my.wingtra.com or api.sky.wingtra.com gets no
+  change signal from this changelog. Recorded as searched because the changelog is real,
+  dated and public — with that scope limitation stated.
+surfaces:
+- name: WingtraCLOUD + Wingtra App
+  url: https://knowledge.wingtra.com/en/wingtracloud-releases-
+- name: WingtraPILOT / WingtraOne
+  url: https://knowledge.wingtra.com/en/wingtrapilot-wingtraone-releases
+- name: WingtraRAY
+  url: https://knowledge.wingtra.com/en/wingtraray-releases-
+- name: Blue sUAS software
+  url: https://knowledge.wingtra.com/en/blue-suas-software-releases-changelog
+entries:
+- version: v1.66.0
+  date: '2026-08-31'
+  surface: WingtraCLOUD + Wingtra App
+  breaking: false
+  highlights:
+  - Improved Re-P geotagging handling of calibration images
+  - Support for comments in publicly shared flight plans
+  - More reliable site editing
+- version: v1.65.0
+  date: '2026-08-25'
+  surface: WingtraCLOUD + Wingtra App
+  breaking: false
+  highlights:
+  - More reliable GDT rebinding
+  - Improved upload estimates for processing
+- version: v1.64.0
+  date: '2026-08-17'
+  surface: WingtraCLOUD + Wingtra App
+  breaking: false
+  highlights:
+  - RTH slider responsiveness
+  - Complete terrain downloads for small sites
+  - Clearer messaging for skipped data organization
+- version: v1.62.0
+  date: '2026-08-05'
+  surface: WingtraCLOUD + Wingtra App
+  breaking: false
+  highlights:
+  - More robust processing and geotagging
+  - GPS status shown in the pre-flight checklist
+  - Earlier flight validation
+- version: v1.61.0
+  date: '2026-07-28'
+  surface: WingtraCLOUD + Wingtra App
+  breaking: false
+  highlights:
+  - Improved reliability of resumed flights
+- version: v1.60.0
+  date: '2026-07-20'
+  surface: WingtraCLOUD + Wingtra App
+  breaking: false
+  highlights:
+  - Improved processing of larger datasets
+- version: v1.59.0
+  date: '2026-07-13'
+  surface: WingtraCLOUD + Wingtra App
+  breaking: false
+  highlights:
+  - New Processing Settings page
+  - Default correction method selectable per user
+- version: v1.57.0
+  date: '2026-06-29'
+  surface: WingtraCLOUD + Wingtra App
+  breaking: false
+  highlights:
+  - Telemetry rebinding support
+  - Clearer compatibility update guidance
+  - Smoother pre-flight checklist
+- version: v2.19.0
+  date: '2025-07-03'
+  surface: WingtraPILOT / WingtraOne
+  breaking: false
+  highlights:
+  - Over-the-air update 30 seconds faster with smoother progress indication
+- version: v2.18.1
+  date: '2025-05-14'
+  surface: WingtraPILOT / WingtraOne
+  breaking: false
+  highlights:
+  - Cruise servo failure false positives addressed
+  - Distance sensor auto-repower
+x-evidence:
+  fetched: '2026-09-04'
+  probes:
+  - {url: 'https://knowledge.wingtra.com/en/wingtracloud-releases-', http_status: 200}
+  - {url: 'https://knowledge.wingtra.com/en/wingtrapilot-wingtraone-releases', http_status: 200}

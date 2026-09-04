@@ -1,0 +1,145 @@
+generated: '2026-09-04'
+method: derived
+source:
+- graphql/wingtra-my-portal.graphql
+- https://api.my.wingtra.com/graphql
+note: >-
+  Derived from the introspected GraphQL schema — the only machine-readable contract Wingtra
+  serves. There is no OpenAPI, so relationships come from GraphQL field types and from
+  id-reference fields verified in the SDL, not from $ref links. Wingtra publishes no object
+  reference, so no id prefixes or domain semantics could be searched for; identifier
+  formats below are the field names and types the schema itself declares.
+identity_model:
+  tenancy: >-
+    Every account belongs to a tenant (AppMetadata.tenantId), and a tenant may be a
+    reseller/distributor (isResellerTenant, getDistributorToken, saveResellerData) or an
+    end customer. Reseller tenants act on drones and licences belonging to their customers,
+    which is why the schema carries paired customer/partner variants of several operations
+    (getAlreadyRegisteredPayloads vs getAlreadyRegisteredPayloadsPartner).
+  external_ids:
+  - {field: AppMetadata.hs_object_id, system: HubSpot CRM}
+  - {field: AppMetadata.stiggId, system: Stigg (entitlements/billing)}
+  - {field: User.user_id, system: Auth0}
+  note: >-
+    The portal's records are projections of a HubSpot CRM object graph — contacts,
+    companies and properties — rather than a native domain model. GetContactOutput returns
+    HubSpot-shaped {id, properties[], createdAt, updatedAt, archived, archivedAt}.
+entities:
+- name: User
+  graphql_type: User
+  identifiers: [user_id, email]
+  fields: [email, email_verified, name, given_name, family_name, nickname, picture, created_at, updated_at, last_login, last_ip, logins_count]
+  relationships:
+  - {kind: has_many, target: Identity, via: identities}
+  - {kind: has_one, target: AppMetadata, via: app_metadata}
+  - {kind: belongs_to, target: Tenant, via: app_metadata.tenantId}
+  note: An Auth0 user profile as returned to the portal.
+- name: Identity
+  graphql_type: Identity
+  identifiers: [user_id, provider]
+  fields: [connection, provider, isSocial, user_id]
+  relationships:
+  - {kind: belongs_to, target: User, via: identities}
+- name: Tenant
+  graphql_type: null
+  identifiers: [tenantId]
+  relationships:
+  - {kind: has_many, target: User, via: app_metadata.tenantId}
+  - {kind: has_one, target: Country, via: getTenantCountry}
+  note: >-
+    No Tenant object type is exposed; the tenant exists only as an id on user metadata and
+    as the subject of tenant-scoped operations (isResellerTenant, updateTenantCountry).
+- name: Company
+  graphql_type: CompanyResponse
+  identifiers: [id]
+  fields: [id, name]
+  relationships:
+  - {kind: has_many, target: Company, via: getContactPrimaryCompanyChildren, note: parent/child company hierarchy}
+  - {kind: has_many, target: Contact, via: HubSpot association}
+  - {kind: has_one, target: Office, via: saveContactCompanyOffice}
+- name: Contact
+  graphql_type: GetContactOutput
+  identifiers: [id]
+  fields: [id, properties, createdAt, updatedAt, archived, archivedAt]
+  relationships:
+  - {kind: has_many, target: Property, via: properties}
+  - {kind: belongs_to, target: Company, via: getContactPrimaryCompanyChildren}
+  note: A HubSpot contact record surfaced through the portal.
+- name: Property
+  graphql_type: Property
+  identifiers: [name]
+  relationships:
+  - {kind: belongs_to, target: Contact, via: properties}
+  note: >-
+    Generic key/value attribute. The readable set is closed by ContactPropertyEnum
+    (country, US/Canada/Australia state lists, company profile, first-heard-about-Wingtra
+    attribution values) and LicensePropertyEnum.
+- name: Drone
+  graphql_type: DroneResponse
+  identifiers: [contactId, droneId]
+  fields: [contactId, firstName, lastName, droneStatus, isDemoUnit, isGenOnePPK, hasResellerConfig]
+  relationships:
+  - {kind: has_many, target: License, via: getLicensesAssociatedWithDrone}
+  - {kind: has_many, target: Payload, via: getAlreadyRegisteredPayloads}
+  - {kind: has_one, target: Drone, via: replacedDroneId, note: 'self-reference — the unit this drone replaced'}
+  - {kind: belongs_to, target: User, via: getUserDrones}
+  - {kind: has_one, target: WingtraCarePlan, via: updateDroneWingtraCarePlan}
+  note: >-
+    The central entity. A drone is identified by a contactId (its HubSpot record) plus a
+    setup code, and carries a replacement chain through replacedDroneId /
+    replacedDroneContactId / replacedDroneStatus.
+- name: License
+  graphql_type: LicenseResponse
+  identifiers: [contactId, type]
+  fields: [contactId, type, ppkLicenseType, lidarLicenseType, blueLicenseType, expirationDate, tmpStartDate]
+  relationships:
+  - {kind: belongs_to, target: Drone, via: getLicensesAssociatedWithDrone}
+  - {kind: has_one, target: LicenseFile, via: getDroneLicenseFile}
+  note: >-
+    Three licence families are modelled — PPK, LiDAR and Blue (Blue sUAS) — plus a TMP+
+    start date. Licences move with a replacement drone
+    (getReplacedDroneLicenses, transferredLicenses).
+- name: LicenseConfiguration
+  graphql_type: GetLicensesConfigurationResponse
+  identifiers: [droneContactId]
+  fields: [droneContactId, resellerContactId, assignedLicenses, removedLicenses, transferredLicenses, replacedDrone, replacedDroneContactId]
+  relationships:
+  - {kind: has_many, target: License, via: assignedLicenses}
+  - {kind: has_many, target: License, via: removedLicenses}
+  - {kind: has_many, target: License, via: transferredLicenses}
+  - {kind: belongs_to, target: Drone, via: droneContactId}
+  note: The reseller-facing view of what a drone's licence set is being changed to.
+- name: Payload
+  graphql_type: AlreadyRegisteredPayloadResponse
+  identifiers: [payload serial/option id]
+  relationships:
+  - {kind: belongs_to, target: Drone, via: registerPayloads}
+  variants:
+  - {name: WingtraRAY payload options, via: getWingtraRayPayloadOptions}
+  - {name: partner-registered payloads, via: getAlreadyRegisteredPayloadsPartner}
+- name: WingtraCarePlan
+  graphql_type: null
+  relationships:
+  - {kind: belongs_to, target: Drone, via: updateDroneWingtraCarePlan}
+  note: >-
+    Exists only as a mutation target; no object type is exposed. Terms are published at
+    https://wingtra.com/legal/wingtracare-terms-conditions/
+- name: SsoToken
+  graphql_type: SsoTokenOutput
+  relationships:
+  - {kind: belongs_to, target: User}
+  issuers: [Sky (WingtraCLOUD), HubSpot, Thinkific, Canny, Distributor]
+  note: >-
+    getSkyToken, getHubspotToken, getThinkificToken, getCannyToken and getDistributorToken
+    exchange a portal session for a token against a downstream surface. getSkyToken is the
+    documented bridge between this API and the WingtraCLOUD REST API.
+relationship_count: 22
+entity_count: 12
+surfaces:
+  graphql: https://api.my.wingtra.com/graphql
+  rest: https://api.sky.wingtra.com (no contract published)
+  note: >-
+    The WingtraCLOUD REST surface almost certainly carries the operational half of the
+    domain — sites, flights, layers, jobs, files — but it publishes no schema and is closed
+    to anonymous callers, so no entity from it is modelled here. Doing so would mean
+    inventing a data model from route names.

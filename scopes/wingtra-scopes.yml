@@ -1,0 +1,40 @@
+generated: '2026-09-04'
+method: probed
+source: https://my-wingtra.eu.auth0.com/.well-known/openid-configuration
+docs: null
+note: >-
+  Wingtra publishes no scope or permission reference — there is no developer portal to
+  publish one on. The scopes below are the `scopes_supported` array the Wingtra Auth0
+  tenant serves in its own OIDC discovery document, fetched anonymously. They are standard
+  OIDC identity scopes: the tenant advertises no Wingtra product scope (nothing for drones,
+  licences, sites, flights or files), which means the portal GraphQL API and the
+  WingtraCLOUD REST API do not express authorization as OAuth scopes. Authorization is
+  carried instead by tenant membership and by the `assigned_roles` array the login mutation
+  returns, neither of which is documented publicly. scope_count counts what is served, not
+  what governs the API.
+scope_count: 14
+issuer: https://my-wingtra.eu.auth0.com/
+scopes:
+- {name: openid, description: OIDC — request an ID token., standard: true}
+- {name: profile, description: OIDC — basic profile claims., standard: true}
+- {name: email, description: OIDC — email address., standard: true}
+- {name: email_verified, description: Whether the email address has been verified., standard: true}
+- {name: offline_access, description: OIDC — issue a refresh token., standard: true}
+- {name: name, description: Full name claim., standard: true}
+- {name: given_name, description: Given name claim., standard: true}
+- {name: family_name, description: Family name claim., standard: true}
+- {name: nickname, description: Nickname claim., standard: true}
+- {name: picture, description: Profile picture URL claim., standard: true}
+- {name: phone, description: Phone number claim., standard: true}
+- {name: address, description: Address claim., standard: true}
+- {name: created_at, description: 'Auth0 extension — account creation timestamp.', standard: false}
+- {name: identities, description: 'Auth0 extension — linked identity providers for the account.', standard: false}
+product_scopes:
+  count: 0
+  note: >-
+    None. No scope in the tenant names a Wingtra resource, so no API-level scope surface
+    exists to document.
+x-evidence:
+  fetched: '2026-09-04'
+  probes:
+  - {url: 'https://my-wingtra.eu.auth0.com/.well-known/openid-configuration', http_status: 200}
