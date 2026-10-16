@@ -2,6 +2,13 @@
   "repo": "wingtra",
   "feeds": [
     {
+      "source": "https://wingtra.com/blog/",
+      "feed_url": "https://wingtra.com/blog/",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    },
+    {
       "source": "https://wingtra.com/support/",
       "feed_url": "https://wingtra.com/support/",
       "title": "",
@@ -10,5 +17,5 @@
     }
   ],
   "post_count": 0,
-  "fetched": "2026-10-03T12:30:02Z"
+  "fetched": "2026-10-10T13:15:00Z"
 }
